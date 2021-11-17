@@ -1,13 +1,17 @@
-FROM node:14.16.0-alpine3.13
-RUN sudo chown -R $USER /usr/local/lib/node_modules
+FROM node:16.13.0-alpine3.14
+
 RUN addgroup app && adduser -S -G app app
+
 USER app
 
 WORKDIR /app
-COPY package*.json ./
+
+COPY --chown=app:node package*.json ./
+
 RUN npm install
-COPY . .
 
-EXPOSE 3000 
+COPY --chown=app:node . .
 
-CMD ["npm", "start"]
+EXPOSE 3000
+
+CMD [“npm”, “start”]
